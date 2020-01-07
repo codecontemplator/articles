@@ -209,7 +209,7 @@ Assuming above definitions the program is translated to
 
 ```haskell
 program = runIxStateT program' Initial
-    where proram' = do
+    where program' = do
         transitionToIntermediate
         transitionToFinal
 ```
@@ -218,7 +218,7 @@ Repeated transitions are now invalid as well. The following code does not compil
 
 ```haskell
 program = runIxStateT program' Initial
-    where proram' = do
+    where program' = do
         transitionToIntermediate
         transitionToIntermediate  -- invalid repeated transition gives a compile time error
         transitionToFinal
