@@ -54,7 +54,7 @@ void Program()
 }    
 ```
 
-I forgot to modify the *Initial* state to actually allow the transition. I practice the code was a lot more complicated that this ofcourse and even though I though I had test coverage I had not. The code passed code reviews and was set into production where it failed. The thing is; **the code compiles**. For all the compiler knows the code is just fine since our way of preventing illegal transitions is using **runtime exceptions**. That is a weakness of the state pattern when used to implement a fsm. It has other weaknesses, such as beeing rather verbose, to but lets keep our focus on compile time verification.
+I forgot to modify the *Initial* state to actually allow the transition. I practice the code was a lot more complicated that this of course, and even though I thought I had test coverage I had not. The code passed code reviews and was set into production where it failed. The thing is; **the code compiles**. For all the compiler knows the code is just fine since our way of preventing illegal transitions is using **runtime exceptions**. That is a weakness of the state pattern when used to implement a fsm. It has other weaknesses, such as being rather verbose, to but lets keep our focus on compile time verification.
 
 ## Can we do better? 
 
@@ -125,7 +125,7 @@ Spoiler alert: **yes we can**
 
 The problem with the second approach above is that we need to manually pass the state around. If that was done by the framework we could just focus on the program we want to write. 
 
-The standard approach to avoid explicitly passing state around is to leverage a **state monad**. A limitiation of the ordinary state monad is that the state type cannot be changed through the computation. Luckily, some smart people invented the indexed state monad which is a generalization of the state monad that allows just this.
+The standard approach to avoid explicitly passing state around is to leverage a **state monad**. A limitation of the ordinary state monad is that the state type cannot be changed through the computation. Luckily, some smart people invented the indexed state monad which is a generalization of the state monad that allows just this.
 
 It might be worth pointing out that the state monad here should not be confused with the effect monad introduced earlier. Their purposes are entirely different. The purpose of the (indexed) state monad is to make sure we only carry out valid state transitions while the purpose of the effect monad is the allow our code to execute actions. However, to get a working solution we need both. This means that we need to combine the indexed state monad and an effect monad. Monads are generally combined using monad transformers which is just the right tool. In our case we need an **index state monad transformer** that accepts an ordinary effect monad. Beautiful! Let's get to work.
 
@@ -155,8 +155,8 @@ imodify f = IxStateT (\si -> return (f si,()))
 Indexed monads are not really monads so the do-notation does not work out-of-the-box. Luckily, haskell allows us to override the do notation when enabling the RebindableSyntax extension.
 
 ```haskell
-module IxMonadDoNotation where
 {-# LANGUAGE RebindableSyntax #-}
+module IxMonadDoNotation where
 
 import Prelude hiding ((>>=), (>>), return)
 import IxModuleCore
@@ -173,7 +173,7 @@ v >> w = v >>= \_ -> w
 
 ## Implementation
 
-With the index monad defintions in place we can apply it to the problem. The type safe fsm is given below.
+With the index monad definitions in place we can apply it to the problem. The type safe fsm is given below.
 
 ```haskell
 
@@ -209,7 +209,7 @@ program = runIxStateT program' Initial
         transitionToFinal
 ```
 
-To actually perfom effectful actions we need to lift the operations into the indexed state monad. Here is a quick example of this, just to be complete.
+To actually perform actions with side effects we need to lift the operations into the indexed state monad. Here is a quick example of this for completeness sake.
 
 ```haskell
 class IxMonadTrans t where
