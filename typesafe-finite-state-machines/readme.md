@@ -39,7 +39,7 @@ class StateContext
 }
 ```
 
-Three states, **Initial**, **Intermediate** and **Final** and two transitions **Initial -> Intermediate** and **Intermediate -> Final**. It is not allowed to transition from directly from **Initial** to **Final**. My task was to add some new code which would require the said transition. 
+Three states, **Initial**, **Intermediate** and **Final** and two transitions **Initial → Intermediate** and **Intermediate → Final**. It is not allowed to transition from directly from **Initial** to **Final**. My task was to add some new code which would require the said transition. 
 
 ```csharp
 void Program() 
@@ -77,7 +77,7 @@ fsm Intermediate TransitionToFinal = return Final
 fsm state _ = return state -- catch all fallback
 ```
 
-Easy to understand and quick to implement. Note that the monad m in the code above is some kind of effect monad, such as the IO monad that allows us to express side actions.
+Easy to understand and quick to implement. Note that the monad *m* in the code above is some kind of effect monad, such as the IO monad that allows us to express actions as side effects.
 However, illegal state transitions are still not caught at compile time. 
 
 In the second post Oskar takes a more advanced approach. The article involves some other techniques but the core idea is that, since our states are different we should use different types to model them so that the compiler is also aware of the different kinds of states. A simplified version is shown below.
@@ -125,30 +125,21 @@ Spoiler alert: **yes we can**
 
 The problem with the second approach above is that we need to manually pass the state around. If that was done by the framework we could just focus on the program we want to write. 
 
-The standard approach to avoid explicitly passing state around is to leverage a **state monad**. A limitiation of the ordinary state monad is that the state type cannot be changed through the computation. Luckily, some smart people invented the index state monad which is a generalization of the state monad that allows just this.
+The standard approach to avoid explicitly passing state around is to leverage a **state monad**. A limitiation of the ordinary state monad is that the state type cannot be changed through the computation. Luckily, some smart people invented the indexed state monad which is a generalization of the state monad that allows just this.
 
 It might be worth pointing out that the state monad here should not be confused with the effect monad introduced earlier. Their purposes are entirely different. The purpose of the (indexed) state monad is to make sure we only carry out valid state transitions while the purpose of the effect monad is the allow our code to execute actions. However, to get a working solution we need both. This means that we need to combine the indexed state monad and an effect monad. Monads are generally combined using monad transformers which is just the right tool. In our case we need an **index state monad transformer** that accepts an ordinary effect monad. Beautiful! Let's get to work.
 
 ## Monad definitions
 
-Most of the definitions below comes from [Kwang Yul Seo's article on Indexed monads](https://kseo.github.io/posts/2017-01-12-indexed-monads.html).
+Most of the definitions below comes from [Kwang Yul Seo's article on Indexed monads](https://kseo.github.io/posts/2017-01-12-indexed-monads.html) and from [Benjamin Hodgson excellent stackoverflow post](https://stackoverflow.com/questions/39328175/type-safe-flow-state-machine).
 
 ```haskell
-module IxState where
+module IxMonadCore where
 
 -- define indexed monads
 class IxMonad m where
     ireturn :: a -> m p p a
     ibind :: m p q a -> (a -> m q r b) -> m p r b
-
--- allow for ordinary monads to be index monads
-{-
-newtype MW m p q a = MW { unMW:: m a }
-
-instance Monad m => IxMonad (MW m) where
-    ireturn = MW . return
-    ibind (MW m) f = MW (m >>= unMW . f)
--}
 
 -- define indexed state monad transformer
 newtype IxStateT m si so v = IxStateT { runIxStateT :: si -> m (so,v) }
@@ -157,16 +148,8 @@ instance Monad m => IxMonad (IxStateT m) where
   ireturn x = IxStateT (\si -> return (si,x))
   ibind (IxStateT m) f = IxStateT (\si -> m si >>= (\ (sm,x) -> runIxStateT (f x) sm))
 
-{-
-iget :: Monad m => IxStateT m si si si
-iget = IxStateT (\si -> return (si,si))
-
-iput :: Monad m => so -> IxStateT m si so ()
-iput x = IxStateT (\si -> return (x,()))
--}
-
 imodify :: Monad m => (si -> so) -> IxStateT m si so ()
-imodify f = IxStateT (\si -> return (f x,()))
+imodify f = IxStateT (\si -> return (f si,()))
 ```
 
 Indexed monads are not really monads so the do-notation does not work out-of-the-box. Luckily, haskell allows us to override the do notation when enabling the RebindableSyntax extension.
@@ -175,7 +158,7 @@ Indexed monads are not really monads so the do-notation does not work out-of-the
 {-# LANGUAGE RebindableSyntax #-}
 
 import Prelude hiding ((>>=), (>>), return)
-import IxState
+import IxModuleCore
 
 return :: (Monad m) => a -> IxStateT m si si a
 return = ireturn
@@ -198,10 +181,10 @@ data Final = Final
 
 type EffectMonad = IO
 
-transitionToIntermediate :: IxState EffectMonad Initial Intermediate ()
-transitionToIntermediate _ = imodify (\_ -> Intermediate) >> return ()
+transitionToIntermediate :: IxStateT EffectMonad Initial Intermediate ()
+transitionToIntermediate = imodify (\_ -> Intermediate) >> return ()
 
-transitionToFinal ::IxState EffectMonad Intermediate Final ()
+transitionToFinal ::IxStateT EffectMonad Intermediate Final ()
 transitionToFinal = imodify (\_ -> Final) >> return ()
 ```
 
@@ -210,8 +193,8 @@ Assuming above definitions the program is translated to
 ```haskell
 program = runIxStateT program' Initial
     where program' = do
-        transitionToIntermediate
-        transitionToFinal
+                        transitionToIntermediate
+                        transitionToFinal
 ```
 
 Repeated transitions are now invalid as well. The following code does not compile.
@@ -223,6 +206,26 @@ program = runIxStateT program' Initial
         transitionToIntermediate  -- invalid repeated transition gives a compile time error
         transitionToFinal
 ```
+
+To actually perfom effectful actions we need to lift the operations into the indexed state monad. Here is a quick example of this, just to be complete.
+
+```haskell
+class IxMonadTrans t where
+    ilift :: Monad m => m a -> t m i i a
+
+instance IxMonadTrans IxStateT where
+    ilift m = IxStateT $ \s -> m >>= \x -> return (s, x)
+
+programWithIO = runIxStateT programWithIO' Initial
+    where programWithIO' = do
+                        ilift $ putStrLn "Initial"
+                        transitionToIntermediate
+                        ilift $ putStrLn "Intermediate"
+                        transitionToFinal
+                        ilift $ putStrLn "Final"
+```
+
+The source full source code for the examples can be found [here](/basics).
 
 A full implementation of the state machine in Oskar Wickström's examples is provided [here](https://repl.it/@daniel_brannstrom/statefsmtest).
 
