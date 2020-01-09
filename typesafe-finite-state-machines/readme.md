@@ -227,7 +227,7 @@ programWithIO = runIxStateT programWithIO' Initial
                         ilift $ putStrLn "Final"
 ```
 
-The source full source code for the examples can be found [here](basics).
+The source code for the examples can be found [here](basics).
 
 A full implementation of the state machine in Oskar Wickström's examples is provided [here](full).
 
