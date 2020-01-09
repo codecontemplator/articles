@@ -155,6 +155,7 @@ imodify f = IxStateT (\si -> return (f si,()))
 Indexed monads are not really monads so the do-notation does not work out-of-the-box. Luckily, haskell allows us to override the do notation when enabling the RebindableSyntax extension.
 
 ```haskell
+module IxMonadDoNotation where
 {-# LANGUAGE RebindableSyntax #-}
 
 import Prelude hiding ((>>=), (>>), return)
@@ -175,6 +176,7 @@ v >> w = v >>= \_ -> w
 With the index monad defintions in place we can apply it to the problem. The type safe fsm is given below.
 
 ```haskell
+
 data Initial = Initial
 data Intermediate = Intermediate
 data Final = Final
@@ -225,7 +227,7 @@ programWithIO = runIxStateT programWithIO' Initial
                         ilift $ putStrLn "Final"
 ```
 
-The source full source code for the examples can be found [here](/basics).
+The source full source code for the examples can be found [here](basics).
 
-A full implementation of the state machine in Oskar Wickström's examples is provided [here](https://repl.it/@daniel_brannstrom/statefsmtest).
+A full implementation of the state machine in Oskar Wickström's examples is provided [here](full).
 
