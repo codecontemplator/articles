@@ -176,7 +176,6 @@ v >> w = v >>= \_ -> w
 With the index monad definitions in place we can apply it to the problem. The type safe fsm is given below.
 
 ```haskell
-
 data Initial = Initial
 data Intermediate = Intermediate
 data Final = Final
