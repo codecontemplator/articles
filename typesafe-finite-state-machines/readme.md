@@ -219,11 +219,11 @@ instance IxMonadTrans IxStateT where
 
 programWithIO = runIxStateT programWithIO' Initial
     where programWithIO' = do
-                        ilift $ putStrLn "Initial"
-                        transitionToIntermediate
-                        ilift $ putStrLn "Intermediate"
-                        transitionToFinal
-                        ilift $ putStrLn "Final"
+                            ilift $ putStrLn "Initial"
+                            transitionToIntermediate
+                            ilift $ putStrLn "Intermediate"
+                            transitionToFinal
+                            ilift $ putStrLn "Final"
 ```
 
 The source code for the examples can be found [here](basics).
