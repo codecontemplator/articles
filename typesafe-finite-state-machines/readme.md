@@ -42,7 +42,7 @@ class StateContext
 Three states, **Initial**, **Intermediate** and **Final** and two transitions **Initial → Intermediate** and **Intermediate → Final**. It is not allowed to transition from directly from **Initial** to **Final**. My task was to add some new code which would require the said transition. 
 
 ```csharp
-void Program() 
+void Program(bool quick) 
 {
     var context = new StateContext();
     if (quick) {  // the new case
