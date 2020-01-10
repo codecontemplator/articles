@@ -230,3 +230,4 @@ The source code for the examples can be found [here](basics).
 
 A full implementation of the state machine in Oskar Wickström's examples is provided [here](full).
 
+Finally, I note that Oskar implemented an even more advanced fsm library called [motor](https://github.com/owickstrom/motor) which is inspired by [the idris ST library](http://docs.idris-lang.org/en/latest/st/state.html).
