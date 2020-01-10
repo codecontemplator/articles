@@ -13,29 +13,29 @@ interface IState
 
 class StateInitial : IState
 {
-    public void TransitionToIntermediate(StateContext context) { context.SetState(new StateIntermediate()); }
-    public void TransitionToFinal(StateContext context) { throw new Exception("Invalid state transition"); }
+    public void TransitionToIntermediate(StateContext context) => context.SetState(new StateIntermediate());
+    public void TransitionToFinal(StateContext context) => throw new Exception("Invalid state transition");
 }
 
 class StateIntermediate : IState
 {
-    public void TransitionToIntermediate(StateContext context) {  }
-    public void TransitionToFinal(StateContext context) { context.SetState(new StateFinal()); }
+    public void TransitionToIntermediate(StateContext context) => throw new Exception("Invalid state transition");
+    public void TransitionToFinal(StateContext context) => context.SetState(new StateFinal());
 }
 
 class StateFinal : IState
 {
-    public void TransitionToIntermediate(StateContext context) { throw new Exception("Invalid state transition"); }
-    public void TransitionToFinal(StateContext context) { }
+    public void TransitionToIntermediate(StateContext context) => throw new Exception("Invalid state transition");
+    public void TransitionToFinal(StateContext context) => throw new Exception("Invalid state transition");
 }
 
 class StateContext
 {
     private IState state = new StateInitial();
 
-    public void SetState(IState newState) { state = newState; }
-    public void TransitionToIntermediate();
-    public void TransitionToFinal();
+    public void SetState(IState newState) => state = newState;
+    public void TransitionToIntermediate() => state.TransitionToIntermediate(this);
+    public void TransitionToFinal() => state.TransitionToFinal(this);
 }
 ```
 
