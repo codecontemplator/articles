@@ -8,7 +8,7 @@ To add a bit more context, one additional requirement on the application is to s
 
 ## The 	&lt;AuthorizedView&gt; component and the [Authorize] attribute
 
-A page can be tagged using the ```Authorized``` attribute in blazor.
+A page can be tagged using the ```[Authorized]``` attribute in blazor.
 
 ```blazor
 @attribute [Authorize]
