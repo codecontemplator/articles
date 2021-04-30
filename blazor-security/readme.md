@@ -14,7 +14,7 @@ A page can be tagged using the ```Authorized``` attribute in blazor.
 @attribute [Authorize]
 ```
 
-The ```[Authorize]``` attribute works in conjunction with the AuthorizedView or AuthorizeRouteView, which is a specialized version of the former that supports routing. 
+The ```[Authorize]``` attribute works in conjunction with the ```AuthorizedView``` or ```AuthorizeRouteView```, which is a specialized version of the former that supports routing. 
 
 ```xml
 <CascadingAuthenticationState>
