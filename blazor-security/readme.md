@@ -1,8 +1,8 @@
 #  Blazor security 
 
-I have been playing with the security configuration for a blazor application lately. This is a brain dump on the topic. More specifically the context is a client side blazor application with a backend (backend for frontend) and a OIDC authorization server (Azure AD). The focus of this article is on the client side rather than on the server side, since that is the part that is less mature and maybe less understood. Regarding what the blazor framework does and does not is a bit of guessing from my side since it is not always clear from the documentation but it is my mental model at the time of writing.
+How do you make a secure blazor application? More specifically, the assumed context is a **client side blazor application** with a **backend for frontend in aspnet core** and an **OIDC authorization server** (such as Azure AD). Backend for frontend or just *BFF* means that it is a backend made for the particular application and not a general web api. Of course the BFF can and most likely will call a web api. The focus of this article is on the client side rather than on the server side, since that is the part that is less mature and maybe less understood. Regarding what the blazor framework does and does not is a bit of guessing from my side since, IMHO, it is not always clear from the documentation but it is my mental model at the time of writing.
 
-One requirement on the application was support for single sign-on in an ordinary angular-client  (the old one) and a blazor client (the new one). In the suggested solution both clients shared the same backend. The key to enable single sign-on was that they both shared the same session cookie provided by the aspnet core backend. Essentially the cookie just contains the authentication token that the OIDC server provided during the login phase. This means that, as long as the blazor client can support the same OIDC flow, single sign-on is supported.
+To add a bit more context, one additional requirement on the application is to support for single sign-on for an ordinary angular/react-client (think "the old one") and a blazor client (think "the new one"). In the solution both clients share the same backend. The key to enable single sign-on is that they both shared the same session cookie provided by the BFF. Essentially the cookie just contains the authentication token that the OIDC server provided during the login phase. This means that, as long as the blazor client can support the same OIDC flow, single sign-on is supported.
 
 ## The 	&lt;AuthorizedView&gt; component and the [Authorize] attribute
 
@@ -62,7 +62,7 @@ The login page is also straight forward.
 @inject NavigationManager Navigation
 @using Microsoft.AspNetCore.WebUtilities
 
-<button @onclick="LoggingIn">Login</button>
+<button @onclick="DoLogin">Login</button>
 
 @code {
     public string ReturnUrl { get; set; }
@@ -74,12 +74,9 @@ The login page is also straight forward.
             ReturnUrl = returnUrl;
     }
 
-    private void LoggingIn(MouseEventArgs args)
+    private void DoLogin(MouseEventArgs args)
     {
-        if (ReturnUrl != null)
-            Navigation.NavigateTo($"authorize/sign-in?returnUrl={Uri.EscapeDataString(ReturnUrl)}", true);
-        else
-            Navigation.NavigateTo($"authorize/sign-in", true);
+        Navigation.NavigateTo($"authorize/sign-in?returnUrl={Uri.EscapeDataString(ReturnUrl)}", true);
     }
 }
 ```
@@ -153,7 +150,55 @@ The idea is to expose a user endpoint in the backend that, basically returns ```
 
 There is one caveat to the solution above; in a single page application the user might stay for quite some time on a page without triggering a new call to ```AuthenticationStateProvider.GetAuthenticationStateAsync()``` which would trigger a new login if the session expired. 
 
+The idea here is to make backend api calls using an http client that will redirect to the login page when not authorized. Http client behaviors are augmented using message handlers. Here is an authorized message handler as suggested here https://github.com/berhir/BlazorWebAssemblyCookieAuth. 
+
+```csharp
+public class AuthorizedHandler : DelegatingHandler
+{
+    private readonly HostAuthenticationStateProvider _authenticationStateProvider;
+
+    public AuthorizedHandler(HostAuthenticationStateProvider authenticationStateProvider)
+    {
+        _authenticationStateProvider = authenticationStateProvider;
+    }
+
+    protected override async Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
+        CancellationToken cancellationToken)
+    {
+        var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        HttpResponseMessage responseMessage;
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            // if user is not authenticated, immediately set response status to 401 Unauthorized
+            responseMessage = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+        }
+        else
+        {
+            responseMessage = await base.SendAsync(request, cancellationToken);
+        }
+
+        if (responseMessage.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            // if server returned 401 Unauthorized, redirect to login page
+            _authenticationStateProvider.SignIn();
+        }
+
+        return responseMessage;
+    }
+}
+```
+
+In the client startup it is used as
+
+```csharp
+builder.Services
+    .AddHttpClient("authorizedClient", client => client.BaseAddress = baseAddress)
+    .AddHttpMessageHandler<AuthorizedHandler>();
+```
+
 # References
 
 * https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-5.0&tabs=visual-studio&viewFallbackFrom=aspnetcore-3.0
 * https://damienbod.com/2021/03/08/securing-blazor-web-assembly-using-cookies/
+* https://github.com/berhir/BlazorWebAssemblyCookieAuth
