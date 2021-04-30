@@ -2,7 +2,7 @@
 
 How do you make a secure blazor application? More specifically, the assumed context is a **client side blazor application** with a **backend for frontend in aspnet core** and an **OIDC authorization server** (such as Azure AD). Backend for frontend or just *BFF* means that it is a backend made for the particular application and not a general web api. Of course the BFF can, and most likely will, call a web api. 
 
-The focus of this article is on the client side rather than on the server side, since that is the part that is less mature and maybe less understood. Regarding what the blazor framework does and does not is a bit of guessing from my side since, IMHO, it is not always clear from the documentation. To out it simply: it is my mental model at the time of writing.
+The focus of this article is on the client side rather than on the server side, since that is the part that is less mature and maybe less understood. Regarding what the blazor framework does and does not is a bit of guessing from my side since, IMHO, it is not always clear from the documentation. It is simply my mental model at the time of writing.
 
 To add a bit more context, one additional requirement on the application is to support for single sign-on for an ordinary angular/react-client (think "the old one") and a blazor client (think "the new one"). In the solution both clients share the same backend. The key to enable single sign-on is that they both shared the same session cookie provided by the backend. Essentially the cookie just contains the authentication token that the OIDC server provided during the login phase. This means that, as long as the blazor client can support the same OIDC flow, single sign-on is supported.
 
