@@ -51,7 +51,7 @@ In the example above, if the user is not authorized, the ```<RedirectToLogin>```
 }
 ```
 
-It redirect to the login page keeping track of the current page so that the application can return there after the login process.
+It redirects to the login page keeping track of the current page so that the application can return there after the login process.
 
 ## The login page
 
