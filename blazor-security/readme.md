@@ -83,7 +83,7 @@ The login page is also straight forward.
 
 It provides a login button that, when pressed, calls the backend ```authorize/sign-in``` endpoint. It will also pass on the requested return url if such is provided. Again, this is so that the application can return to the correct page after the login process is finished.
 
-## The Authorize endpoint
+## The sign-in endpoint
 
 The authorize endpoint uses the aspnet core method ```Challenge``` to start the login process. The code is provided below:
 
