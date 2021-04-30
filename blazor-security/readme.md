@@ -150,7 +150,7 @@ The idea is to expose a user endpoint in the backend that, basically returns ```
 
 ## Bonus: Handling unauthorized api calls
 
-There is one caveat to the solution above; in a single page application the user might stay for quite some time on a page without triggering a new call to ```AuthenticationStateProvider.GetAuthenticationStateAsync()``` which would trigger a new login if the session expired. 
+There is one caveat to the solution above; in a single page application the user might stay on for quite some time on a page that makes background api calls. Since the page is not reloaded new call to ```AuthenticationStateProvider.GetAuthenticationStateAsync()``` are not triggered and thus an expired session is not detected. 
 
 The idea here is to make backend api calls using an http client that will redirect to the login page when not authorized. Http client behaviors are augmented using message handlers. Here is an authorized message handler as suggested here https://github.com/berhir/BlazorWebAssemblyCookieAuth. 
 
