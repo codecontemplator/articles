@@ -111,7 +111,6 @@ solve tiles =
     let corners = head $ hylo getCorners buildSearchTree (Seed tiles emptyBoard)
     in foldr ((*) . _tileId) 1 corners
 
-
 parseTile :: [String] -> Tile
 parseTile (header:bitsRaw) =
     let
@@ -134,7 +133,6 @@ parseTiles input =
         group n l
             | n > 0 = take n l : group n (drop n l)
             | otherwise = error "Negative or zero n"
-
 
 main :: IO ()
 main = do
