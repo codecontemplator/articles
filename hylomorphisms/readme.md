@@ -143,3 +143,5 @@ solve tiles =
     let corners = head $ hylo getCorners buildSearchTree (Seed tiles emptyBoard)
     in foldr ((*) . _tileId) 1 corners
 ```
+
+The full source code is available [here](./main.hs).
