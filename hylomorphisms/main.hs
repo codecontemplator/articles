@@ -1,5 +1,5 @@
 -- https://adventofcode.com/2020/day/20
-{-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE DeriveFunctor, BangPatterns #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
 import Data.Map (Map)
@@ -140,12 +140,11 @@ main :: IO ()
 main = do
         input <- readFile "input.txt"
         let tiles = parseTiles input
-        let solution = solve tiles
-        putStrLn $ "result=" ++ show solution
-        if solution == 20899048083289 then do
-            putStrLn "sample correct"
-        else if solution == 79412832860579 then do
-            putStrLn "real correct"
+        let! solution = solve tiles
+        let expectedSolution = 79412832860579 
+        putStrLn $ "result = " ++ show solution
+        if solution == expectedSolution then do
+            putStrLn "test passed"
         else do
-            putStrLn "---"
+            putStrLn "test failed"
 
