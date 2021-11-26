@@ -44,7 +44,7 @@ hylo :: Functor f => Algebra f a -> Coalgebra f b -> b -> a
 hylo f g = f . fmap (hylo f g) . g
 ```
 
-In a lazy language like Haskell the full structure will never be built which is important since the it might be to large to fit into memory.
+In a lazy language like Haskell the full structure will never be built which is important since it might be to large to fit into memory.
 
 ## Putting theory into practice
 
