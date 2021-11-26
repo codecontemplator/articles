@@ -33,7 +33,7 @@ type Coalgebra f a = a -> f a
 Indeed there is such a thing. For lists, *co-algebras* can be expressed using `unfoldr`. Instead of collapsing a list into an aggregate, `unfoldr` builds up a list from a seed. For example the infinite list of fibonacci numbers can be expressed as
 
 ```
-fib = unfoldr (\(p,c) -> Just (c, (c, p+c))) (1,1)
+fib = unfoldr (\(p,c) -> Just (p, (c, p+c))) (1,1)
 ```
 
 The intuition behind a *hylomorphism* is that it builds up a structure using a coalgebra and a seed
