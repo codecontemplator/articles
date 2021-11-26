@@ -83,7 +83,7 @@ This can be encoded as
 data SearchTreeF a = Leaf Board | NodeF [a] deriving Functor
 ```
 
-Remember that the co-algebra requires the search tree data structure needs to be a functor. The functor instance can be written by hand or, in many cases, just simply derived as above.
+Remember that hylomorphisms require that the data structure is a functor. The functor instance can be written by hand or, in many cases, just simply derived as above.
 
 The co-algebra expresses one step of the recursive search algorithm; it takes the seed and produces a structure filled with new seeds that in turn can be unfolded.
 
