@@ -146,6 +146,6 @@ solve tiles =
     in foldr ((*) . _tileId) 1 corners
 ```
 
-Having extracted the corners it is trivial to calculate the final answer by multiplying the corresponding tile ids.
+Having extracted the corners it is trivial to calculate the final answer by multiplying the actual tile ids.
 
 The full source code is available [here](./main.hs).
