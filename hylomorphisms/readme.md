@@ -24,7 +24,7 @@ Functions that matches the type signature `f a -> a` together with a functor `f`
 type Algebra f a = f a -> a
 ```
 
-In category theory most concept comes with a dual where the arrows are reversed. The new concept is usually named "co-" plus the original one. Lets try that
+In category theory most concepts come with a dual where the arrows are reversed. The new concept is usually named "co-" plus the original one. Lets try that
 
 ```haskell
 type Coalgebra f a = a -> f a
