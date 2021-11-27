@@ -58,7 +58,7 @@ type Side = [Bool]
 data Tile = Tile { _tileId :: Int, _tileSides :: [Side] }
 ```
 
-Tiles are arranged onto a board. The mental model of a board is a two-dimensional array where each position is either empty or populated with a tile. Arrays are inconvenient to expand and it is also inefficient to enumerate candidate positions for new tiles. For that reason the following data structure is used instead
+Tiles are arranged onto a board. The mental model of a board is a two-dimensional array where each position is either empty or populated with a tile. Arrays are inconvenient to expand and it is also inefficient to enumerate candidate positions for new tiles. For these reasons the following data structure is used instead
 
 ```haskell
 type Index = (Int,Int)
