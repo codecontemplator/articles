@@ -1,6 +1,6 @@
 # Hylomorphisms
 
-One of many great articles from Bartosz Milewski is the [Stalking a Hylomorphism in the Wild](https://bartoszmilewski.com/2017/12/29/stalking-a-hylomorphism-in-the-wild/). My conclusions are that hylomorphisms
+One of many great articles from Bartosz Milewski is the [Stalking a Hylomorphism in the Wild](https://bartoszmilewski.com/2017/12/29/stalking-a-hylomorphism-in-the-wild/) where he uses a concept from category theory called *hylomorphisms* to make an elegant solution to a problem from [Advent of code](https://adventofcode.com/2017). My conclusions are that hylomorphisms
 
   * can be used to simplify the implementation of many kinds of recursive search algorithms
   * can be considered a functional design pattern 
