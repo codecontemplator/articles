@@ -58,7 +58,7 @@ type Side = [Bool]
 data Tile = Tile { _tileId :: Int, _tileSides :: [Side] }
 ```
 
-The mental model of a board is a 2 dimensional array where each position is either empty or populated with a tile. Arrays are inconvenient to expand and it is also inefficient to enumerate candidate positions when a new tile is about to be inserted. For that reason the following data structure is used instead
+Tile are arranged onto a board. The mental model of a board is a 2 dimensional array where each position is either empty or populated with a tile. Arrays are inconvenient to expand and it is also inefficient to enumerate candidate positions for new tiles. For that reason the following data structure is used instead
 
 ```haskell
 type Index = (Int,Int)
@@ -66,7 +66,7 @@ type Index = (Int,Int)
 data Board = Board { _indexToTile :: Map Index Tile, _holes :: [Index] }
 ```
 
-At this point it is time to think about the co-algebra and the seed. The puzzle tiles are given as input data. That indicates that tiles are needed as a seed. Having only a set of tiles is not enough though. To solve the puzzle, tiles are added to the board; one by one. That means that a (partly solved) puzzle board is also required. The reasoning leads up to the following definition
+At this point it is time to think about the co-algebra and the seed. The puzzle tiles are given as input data. That indicates that tiles are needed as a seed. Having only a set of tiles is not enough though. To solve the puzzle, tiles are added to the board; one by one. That means that a board is also required. The reasoning leads up to the following definition
 
 ```haskell
 type Pool = [Tile]
