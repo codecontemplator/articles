@@ -1,4 +1,4 @@
-# Hylomorphisms
+# Hylomorphisms - morphine for programmers?
 
 One of many great articles from Bartosz Milewski is the [Stalking a Hylomorphism in the Wild](https://bartoszmilewski.com/2017/12/29/stalking-a-hylomorphism-in-the-wild/) where he uses a concept from category theory called *hylomorphisms* to make an elegant solution to [a problem from advent of code](https://adventofcode.com/2017). My conclusions are that hylomorphisms
 
