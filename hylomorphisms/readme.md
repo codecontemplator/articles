@@ -7,7 +7,7 @@ One of many great articles from Bartosz Milewski is the [Stalking a Hylomorphism
   * does not require a deep understanding of category theory
   * may be limited to lazy languages
 
-In this article I will apply the same technique to [another problem](https://adventofcode.com/2020/day/20) from Advent of code. 
+In this article I will apply the same technique to another problem from Advent of code. 
 
 ## Hylo what?
 
@@ -48,7 +48,7 @@ In a lazy language like Haskell the full structure will never be built which is 
 
 ## Putting theory into practice
 
-The given problem is a kind of puzzle. Each piece, henceforth called tile, has four sides. Each tile side is associated with a bit sequence. The bit sequences of two adjacent sides must match. It is allowed to rotate and/or flip a tile to make it match. A tile is also associated with an integer id. The solution is given by multiplying the ids of the corner tiles of the finished puzzle.
+[The given problem](https://adventofcode.com/2020/day/20) is a kind of puzzle. Each piece, henceforth called tile, has four sides. Each tile side is associated with a bit sequence. The bit sequences of two adjacent sides must match. It is allowed to rotate and/or flip a tile to make it match. A tile is also associated with an integer id. The solution is given by multiplying the ids of the corner tiles of the finished puzzle.
 
 The following data types are used to represent tiles and tile sides
 
