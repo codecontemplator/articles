@@ -81,7 +81,7 @@ The search tree that the co-algebra should unfold is either
 This can be encoded as
 
 ```haskell
-data SearchTreeF a = Leaf Board | NodeF [a] deriving Functor
+data SearchTreeF a = Leaf Board | Node [a] deriving Functor
 ```
 
 Remember that `hylo` require that the data structure is a functor? The functor instance can many times be automatically derived as above.
@@ -99,12 +99,12 @@ If there are more tiles; pick one from the pool and add it, possible rotated or 
 
 ```haskell
 buildSearchTree (Seed pool board) =
-    NodeF [ Seed (removeTileFromPool t pool) (addTileToBoard t' hole board) |
+    Node [ Seed (removeTileFromPool t pool) (addTileToBoard t' hole board) |
                 t     <- pool,
                 t'    <- rotationsAndFlips t,
                 hole  <- _holes board,
                 matches t' hole board
-          ]
+         ]
 ```
 
 To calculate the final answer the corner tiles of the puzzle are required. The algebra thus needs to collapse the search tree into corner tiles of the finished boards.
@@ -133,7 +133,7 @@ getCorners (Leaf board) =
 It is even simpler for internal nodes; just merge the list of solutions into one big list.
 
 ```haskell
-getCorners (NodeF solutions) = concat solutions
+getCorners (Node solutions) = concat solutions
 ```
 
 Having defined both a co-algebra and an algebra the hylomorphism can fuse them together to 

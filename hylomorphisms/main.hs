@@ -69,7 +69,7 @@ data Seed = Seed {  _pool :: Pool, _board :: Board }
 removeTileFromPool :: Tile -> Pool -> Pool
 removeTileFromPool t = filter (/=t)
 
-data SearchTreeF a = Leaf Board | NodeF [a] deriving Functor
+data SearchTreeF a = Leaf Board | Node [a] deriving Functor
 
 type Coalgebra f a = a -> f a
 type Algebra f a = f a -> a
@@ -81,15 +81,15 @@ buildSearchTree :: Coalgebra SearchTreeF Seed
 buildSearchTree (Seed [] board) = Leaf board
 buildSearchTree (Seed pool board) =
         trace ("pool size = " ++ (show . length $ pool) ++ ", holes = " ++ (show . length . _holes $ board)) $
-            NodeF [ Seed (removeTileFromPool t pool) (addTileToBoard t' hole board) |
+            Node [ Seed (removeTileFromPool t pool) (addTileToBoard t' hole board) |
                         t  <- pool,
                         t' <- rotationsAndFlips t,
                         hole  <- _holes board,
                         matches t' hole board
-                ]
+                 ]
 
 getCorners :: Algebra SearchTreeF [[Tile]]
-getCorners (NodeF solutions) = concat solutions
+getCorners (Node solutions) = concat solutions
 getCorners (Leaf board) =
     let
         indexToTile = _indexToTile board
