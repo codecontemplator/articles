@@ -75,7 +75,7 @@ data Seed = Seed {  _pool :: Pool, _board :: Board }
 ```
 
 The search tree that the co-algebra should unfold is either
-  * a finished board
+  * a finished board ... or ...
   * a list of seeds for alternative continuations
 
 This can be encoded as
