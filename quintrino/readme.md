@@ -4,7 +4,7 @@ This is an example of a quintrino rendered in Blender.
 
 <img src="resources/quintrino-example.jpg" width="500" alt="Quintrino Example" />
 
-On [Paul Nylander's awesome page for mathematical artwork](http://www.bugman123.com/Math/index.html) you can find one [^1]  along with some mathematica code to construct one. This article explains how to make on in Blender. There are ofcourse many ways to do it and this approach
+On [Paul Nylander's awesome page for mathematical artwork](http://www.bugman123.com/Math/index.html) you can find one [^1]  along with some mathematica code to construct it. This article explains how to make on in Blender. There are ofcourse many ways to do it and this approach
 is using python scripting for a fully automatic solution[^2]. If you just want to skip to the code feel free to get it [here](script.py) otherwise continue reading. It is not important to have a deep understanding of the underlying math to follow along.
 
 Let's start by looking at at this image.
