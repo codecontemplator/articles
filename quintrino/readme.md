@@ -96,10 +96,12 @@ createStar(armTemplate, 0, 0, 0)
 
 # Upper ring (5 stars)
 for i in range(5):
+    psi = i * 0.4 * math.pi
     createStar(armTemplate, 0, math.pi - alpha, psi + math.pi/5)
 
 # Lower ring (5 stars)
 for i in range(5):
+    psi = i * 0.4 * math.pi
     createStar(armTemplate, math.pi/5, alpha, psi)
 
 # Bottom
