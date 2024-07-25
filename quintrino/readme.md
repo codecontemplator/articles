@@ -11,7 +11,7 @@ Let's start by looking at at this image.
 
 <img src="resources/quintrino-construction.jpg" width="500" alt="Quintrino Construction" />
 
-First we note that the quintrino is a closely related to a shape built out of regular pentagons that is called a dodecahedron. The next thing to note is that it is built up from a multitude of identical arms (illustrated in red)[^3]. Five arms can form a star and for each face in the docecahedron we can place a star. All we need is to figure out how to rotate the arm to place it correctly.
+First we note that the quintrino is a closely related to a shape built out of regular pentagons that is called a dodecahedron. The next thing to note is that it is built up from a multitude of identical arms, illustrated in red[^3]. Five arms can form a star and for each face in the docecahedron we can place a star. All we need is to figure out how to rotate the arm to place it correctly.
 
 ## Creating the arm
 For this article the mesh data for the arm is given. A mesh can be stored in many ways. For blender user the most common way is ofcourse to embed it into a blender file. However, it is nice to keep everything as code so instead the arm mesh is constructed using the function below.
@@ -60,7 +60,7 @@ def rotate(rx, ry, rz):
     return mat
 ```
 
-The function has been crafted to immitate the mathematica function `RotateShape` [^4] so that we can reuse the same angles of rotation as Paul Nylander. We can now create a star using this function:
+The function has been crafted to immitate the mathematica function `RotateShape`[^4] so that we can reuse the same angles of rotation as Paul Nylander. We can now create a star using this function:
 
 ```python
 def createStar(armTemplate):
