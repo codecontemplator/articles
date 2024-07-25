@@ -109,6 +109,9 @@ createStar(armTemplate, 0, math.pi, 0)
 
 
 [^1]: He does not use the term quintrino and the term is not widely used (yet?).
+
 [^2]: A manual construction method is given by Idirko on this youtube link https://www.youtube.com/watch?v=P_bKkguxS3o&ab_channel=ldirko
+
 [^3] For this article we will take the geometry of the arm as given an not try to construct it. 
+
 [^4] `RotateShape` was removed from mathematica at some point but the definition can be found here https://reference.wolfram.com/language/Compatibility/tutorial/Graphics/Shapes.html#428139677
