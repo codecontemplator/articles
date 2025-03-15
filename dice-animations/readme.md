@@ -3,7 +3,7 @@
 I got a question from a friend that is coding a monopoly game if I could make some dice animations. I decided it could be a fun project and I ended up using some automation techinques that worked well and seemed to be worth a few notes.
 
 ## Making the dice model
-Making a dice model is a rather easy task and several tutorials have been published. I used this method https://youtu.be/z3puJoeuBf0?si=A3ju5Pj-N2363Ilv and ended up with this dice:
+Making a dice model is a rather easy task and several tutorials have been published. I used [this method](https://youtu.be/z3puJoeuBf0?si=A3ju5Pj-N2363Ilv) and ended up with this dice:
 
 <img src="resources/dice.png">
 
