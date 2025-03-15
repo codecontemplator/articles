@@ -40,10 +40,7 @@ for source in range(6):
 
 ## Final note
 
-One example animation, illustrating the transition from 3 to 6, can be viewed here 
-
-[![Animated dice](https://img.youtube.com/vi/H0_-ogVngHA?si=CD2GX0m2ZwKg_R52/0.jpg)](https://www.youtube.com/watch?v=H0_-ogVngHA?si=CD2GX0m2ZwKg_R52)
-
+One example animation, illustrating the transition from 3 to 6, can be viewed [here](https://youtube.com/shorts/H0_-ogVngHA?si=g7zIvH0ZLH0dv0e2).
 
 The blender file can be downloaded [here](resources/dice_final.7z).
 
