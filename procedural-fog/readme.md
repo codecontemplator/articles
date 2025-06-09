@@ -16,4 +16,4 @@ Setup the following nodes.
 
 ## Blender file
 
-[procedurla fog.blend](procedural%20fog.blend)
+[procedural fog.blend](procedural%20fog.blend)
